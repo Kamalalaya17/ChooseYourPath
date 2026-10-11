@@ -1,4 +1,4 @@
-```jsx
+
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import { LogOut } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
@@ -34,8 +34,11 @@ export default function Navbar({ area }) {
   const links = LINKS[area] || [];
 
   const handleLogout = async () => {
-    await logout();
-    navigate(`/${area.toLowerCase()}/login`);
+    try {
+      await logout();
+    } finally {
+      navigate(`/${(area || "READER").toLowerCase()}/login`);
+    }
   };
 
   return (
@@ -97,4 +100,3 @@ export default function Navbar({ area }) {
     </nav>
   );
 }
-```
