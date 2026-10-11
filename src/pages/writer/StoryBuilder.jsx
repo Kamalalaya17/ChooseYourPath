@@ -387,8 +387,12 @@ function SceneEditor({ scene, choices, scenes, expanded, onToggle, onChanged, on
                 </select>
               </div>
               <input className="cyp-input" style={{ marginTop: 9 }} placeholder="Consequence — what happens because of this choice" value={cCons} onChange={(e) => setCCons(e.target.value)} />
-              <div style={{ marginTop: 10 }}>
-                <button className="cyp-btn cyp-btn-outline cyp-btn-sm" type="submit" disabled={!cText.trim() || !cNext}>
+                <div style={{ marginTop: 10 }}>
+                <button
+                  className="cyp-btn cyp-btn-primary cyp-btn-sm"
+                  type="submit"
+                  disabled={!cText.trim() || !cNext}
+                >
                   + Add choice
                 </button>
               </div>

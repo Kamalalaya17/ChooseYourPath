@@ -57,9 +57,9 @@ export default function Navbar({ area }) {
           <img
             src="/logo.png"
             alt="ChooseYourPath logo"
-            style={{
-              width: "36px",
-              height: "36px",
+             style={{
+              width: "28px",
+              height: "28px",
               objectFit: "contain",
               flexShrink: 0,
             }}
