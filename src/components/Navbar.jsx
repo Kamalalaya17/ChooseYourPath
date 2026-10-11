@@ -1,3 +1,4 @@
+```jsx
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import { LogOut } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
@@ -40,21 +41,55 @@ export default function Navbar({ area }) {
   return (
     <nav className="cyp-nav">
       <div className="cyp-nav-inner">
-        <Link to="/" className="cyp-brand">
-          <span className="cyp-brand-mark">◇</span>
-          ChooseYourPath
+        <Link
+          to="/"
+          className="cyp-brand"
+          style={{
+            display: "inline-flex",
+            alignItems: "center",
+            gap: "8px",
+            textDecoration: "none",
+          }}
+        >
+          <img
+            src="/logo.png"
+            alt="ChooseYourPath logo"
+            style={{
+              width: "36px",
+              height: "36px",
+              objectFit: "contain",
+              flexShrink: 0,
+            }}
+          />
+          <span>ChooseYourPath</span>
         </Link>
+
         <div className="cyp-nav-links">
           {links.map((l) => (
-            <NavLink key={l.to} to={l.to} className={({ isActive }) => `cyp-nav-link${isActive ? " active" : ""}`}>
+            <NavLink
+              key={l.to}
+              to={l.to}
+              className={({ isActive }) =>
+                `cyp-nav-link${isActive ? " active" : ""}`
+              }
+            >
               {l.label}
             </NavLink>
           ))}
         </div>
+
         <div className="cyp-nav-right">
-          <span className={`cyp-role-chip cyp-role-${user?.role}`}>{user?.role}</span>
+          <span className={`cyp-role-chip cyp-role-${user?.role}`}>
+            {user?.role}
+          </span>
+
           <span className="cyp-nav-user">{user?.username}</span>
-          <button type="button" className="cyp-btn cyp-btn-ghost cyp-btn-sm" onClick={handleLogout}>
+
+          <button
+            type="button"
+            className="cyp-btn cyp-btn-ghost cyp-btn-sm"
+            onClick={handleLogout}
+          >
             <LogOut size={14} /> Logout
           </button>
         </div>
@@ -62,3 +97,4 @@ export default function Navbar({ area }) {
     </nav>
   );
 }
+```
