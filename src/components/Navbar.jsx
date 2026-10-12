@@ -1,4 +1,3 @@
-
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import { LogOut } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
@@ -57,13 +56,22 @@ export default function Navbar({ area }) {
           <img
             src="/logo.png"
             alt="ChooseYourPath logo"
-             style={{
+            width="28"
+            height="28"
+            style={{
+              display: "block",
               width: "28px",
               height: "28px",
+              minWidth: "28px",
+              minHeight: "28px",
+              maxWidth: "28px",
+              maxHeight: "28px",
               objectFit: "contain",
+              flex: "0 0 28px",
               flexShrink: 0,
             }}
           />
+
           <span>ChooseYourPath</span>
         </Link>
 

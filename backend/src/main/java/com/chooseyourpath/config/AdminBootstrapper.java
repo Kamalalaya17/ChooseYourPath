@@ -1,4 +1,3 @@
-
 package com.chooseyourpath.config;
 
 import com.chooseyourpath.entity.User;
@@ -32,26 +31,51 @@ public class AdminBootstrapper implements CommandLineRunner {
     @Override
     @Transactional
     public void run(String... args) {
-        // Do nothing unless both Railway variables are configured.
+
+        // Do nothing unless both variables are provided.
         if (adminUsername == null || adminUsername.isBlank()
                 || adminPassword == null || adminPassword.isBlank()) {
             return;
         }
 
-        // Never overwrite an existing account.
+        User admin;
+
+        // Find existing admin account.
         if (users.existsByUsername(adminUsername)) {
+
+            admin = users.findByUsername(adminUsername)
+                    .orElseThrow(() -> new IllegalStateException(
+                            "Admin username exists but could not be loaded."
+                    ));
+
+            // Only reset the password for an ADMIN account.
+            if (admin.getRole() != Role.ADMIN) {
+                System.out.println(
+                        "Admin bootstrap stopped: existing username is not an ADMIN."
+                );
+                return;
+            }
+
+            admin.setPassword(passwordEncoder.encode(adminPassword));
+            users.save(admin);
+
             System.out.println(
-                    "Admin bootstrap skipped: username already exists.");
+                    "Existing admin password reset successfully."
+            );
+
             return;
         }
 
-        User admin = new User();
+        // Create admin if it does not exist.
+        admin = new User();
         admin.setUsername(adminUsername);
         admin.setPassword(passwordEncoder.encode(adminPassword));
         admin.setRole(Role.ADMIN);
 
         users.save(admin);
 
-        System.out.println("Admin account created successfully.");
+        System.out.println(
+                "Admin account created successfully."
+        );
     }
 }
