@@ -4,6 +4,7 @@ import { useAuth } from "../context/AuthContext";
 import * as storyService from "../services/storyService";
 import StoryCard from "../components/StoryCard";
 import LoadingSpinner from "../components/LoadingSpinner";
+import Navbar from "../components/Navbar";
 
 const GENRES = ["Fantasy / Mystery", "Mystery / Fantasy", "Adventure / Fantasy", "Fantasy", "Mystery", "Adventure"];
 
@@ -55,8 +56,10 @@ export default function Home() {
   const home = user ? (user.role === "READER" ? "/reader/home" : user.role === "WRITER" ? "/writer/dashboard" : "/admin/dashboard") : null;
 
   return (
-    <div className="cyp-page">
-      {/* Hero */}
+  <div className="cyp-page">
+    <Navbar />
+
+    {/* Hero */}
       <section className="cyp-hero">
         <div className="cyp-container">
           <span className="cyp-hero-badge">✦ An interactive story platform</span>
