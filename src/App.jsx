@@ -36,7 +36,7 @@ export default function App() {
       <BrowserRouter>
         <Routes>
           {/* Public */}
-          <Route path="/" element={<Navigate to="/reader/login" replace />} />
+          <Route path="/" element={<Navigate to="/login" replace />} />
           <Route path="/browse" element={<ReaderBrowse />} />
 
           {/* Reader area */}
@@ -72,7 +72,7 @@ export default function App() {
           <Route path="/admin/reports" element={<RoleRoute area="ADMIN"><Reports /></RoleRoute>} />
           <Route path="/admin/settings" element={<RoleRoute area="ADMIN"><AdminSettings /></RoleRoute>} />
 
-          <Route path="/login" element={<Navigate to="/reader/login" replace />} />
+          <Route path="/login" element={<Login />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </BrowserRouter>
