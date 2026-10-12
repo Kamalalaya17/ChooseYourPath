@@ -1,8 +1,8 @@
+
 import { useEffect, useState } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import SceneIllustration from "../components/SceneIllustration";
-import LoadingSpinner from "../components/LoadingSpinner";
 
 const AREA_META = {
   READER: {
@@ -15,6 +15,7 @@ const AREA_META = {
     signupTo: "/reader/signup",
     signupLabel: "New here? Create a reader account",
   },
+
   WRITER: {
     title: "Writer sign in",
     sub: "Enter the studio to build branching worlds — scenes, choices, consequences, endings.",
@@ -25,6 +26,7 @@ const AREA_META = {
     signupTo: "/writer/signup",
     signupLabel: "New here? Create a writer account",
   },
+
   ADMIN: {
     title: "Administrator sign in",
     sub: "Management access to users, stories, comments and platform statistics.",
@@ -35,39 +37,157 @@ const AREA_META = {
   },
 };
 
-export default function Login({ area = "READER" }) {
-  const meta = AREA_META[area];
+export default function Login({ area }) {
+  const meta = area ? AREA_META[area] : null;
   const { login, error, setError } = useAuth();
   const navigate = useNavigate();
   const [params] = useSearchParams();
+
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [busy, setBusy] = useState(false);
 
-  useEffect(() => () => setError(null), [setError]);
+  useEffect(() => {
+    return () => setError(null);
+  }, [setError]);
 
   const submit = async (e) => {
     e.preventDefault();
     setBusy(true);
-    const u = await login(area, username, password);
-    setBusy(false);
-    if (u) navigate(params.get("returnTo") || meta.after, { replace: true });
+
+    try {
+      const u = await login(area, username, password);
+
+      if (u) {
+        navigate(params.get("returnTo") || meta.after, {
+          replace: true,
+        });
+      }
+    } finally {
+      setBusy(false);
+    }
   };
+
+  // Shared entry page
+  if (!area) {
+    return (
+      <div className="cyp-auth">
+        <div className="cyp-auth-art">
+          <SceneIllustration
+            description="A glowing forest merging into a storybook world, with a winding path leading toward distant lights"
+            style="Watercolor"
+            seed={11}
+          />
+
+          <div className="cyp-auth-art-caption">
+            <h2>Every path begins with a choice.</h2>
+            <p>
+              ChooseYourPath — every choice creates a different story.
+            </p>
+          </div>
+        </div>
+
+        <div className="cyp-auth-form-side">
+          <div className="cyp-auth-card">
+            <Link
+              to="/"
+              className="cyp-brand"
+              style={{ marginBottom: 26, display: "inline-flex" }}
+            >
+              <span className="cyp-brand-mark">◇</span>
+              ChooseYourPath
+            </Link>
+
+            <h1>Welcome to ChooseYourPath</h1>
+            <p>Select your account type to continue.</p>
+
+            <div style={{ display: "grid", gap: 20, marginTop: 28 }}>
+              <section>
+                <h2>Reader</h2>
+                <p>Discover stories and choose your path.</p>
+                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
+                  <Link
+                    to="/reader/login"
+                    className="cyp-btn cyp-btn-primary cyp-btn-block"
+                    style={{ textAlign: "center", textDecoration: "none" }}
+                  >
+                    Login
+                  </Link>
+                  <Link
+                    to="/reader/signup"
+                    className="cyp-btn cyp-btn-block"
+                    style={{ textAlign: "center", textDecoration: "none" }}
+                  >
+                    Sign Up
+                  </Link>
+                </div>
+              </section>
+
+              <section>
+                <h2>Writer</h2>
+                <p>Create stories, scenes, choices, and endings.</p>
+                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
+                  <Link
+                    to="/writer/login"
+                    className="cyp-btn cyp-btn-primary cyp-btn-block"
+                    style={{ textAlign: "center", textDecoration: "none" }}
+                  >
+                    Login
+                  </Link>
+                  <Link
+                    to="/writer/signup"
+                    className="cyp-btn cyp-btn-block"
+                    style={{ textAlign: "center", textDecoration: "none" }}
+                  >
+                    Sign Up
+                  </Link>
+                </div>
+              </section>
+
+              <section>
+                <h2>Administrator</h2>
+                <p>Manage users, stories, and platform activity.</p>
+                <Link
+                  to="/admin/login"
+                  className="cyp-btn cyp-btn-primary cyp-btn-block"
+                  style={{ textAlign: "center", textDecoration: "none" }}
+                >
+                  Admin Login
+                </Link>
+              </section>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="cyp-auth">
       <div className="cyp-auth-art">
-        <SceneIllustration description={meta.art} style={meta.style} seed={11} />
+        <SceneIllustration
+          description={meta.art}
+          style={meta.style}
+          seed={11}
+        />
+
         <div className="cyp-auth-art-caption">
           <h2>{meta.caption}</h2>
           <p>ChooseYourPath — every choice creates a different story.</p>
         </div>
       </div>
+
       <div className="cyp-auth-form-side">
         <div className="cyp-auth-card">
-          <Link to="/" className="cyp-brand" style={{ marginBottom: 26, display: "inline-flex" }}>
-            <span className="cyp-brand-mark">◇</span> ChooseYourPath
+          <Link
+            to="/"
+            className="cyp-brand"
+            style={{ marginBottom: 26, display: "inline-flex" }}
+          >
+            <span className="cyp-brand-mark">◇</span>
+            ChooseYourPath
           </Link>
+
           <h1>{meta.title}</h1>
           <p>{meta.sub}</p>
 
@@ -86,6 +206,7 @@ export default function Login({ area = "READER" }) {
                 required
               />
             </div>
+
             <div className="cyp-field">
               <label htmlFor="password">Password</label>
               <input
@@ -99,8 +220,17 @@ export default function Login({ area = "READER" }) {
                 required
               />
             </div>
-            <button className="cyp-btn cyp-btn-primary cyp-btn-block" disabled={busy} type="submit">
-              {busy ? "Signing in…" : `Log in as ${area.charAt(0) + area.slice(1).toLowerCase()}`}
+
+            <button
+              className="cyp-btn cyp-btn-primary cyp-btn-block"
+              disabled={busy}
+              type="submit"
+            >
+              {busy
+                ? "Signing in…"
+                : `Log in as ${
+                    area.charAt(0) + area.slice(1).toLowerCase()
+                  }`}
             </button>
           </form>
 
@@ -109,7 +239,6 @@ export default function Login({ area = "READER" }) {
               {meta.signupLabel} — <Link to={meta.signupTo}>sign up</Link>
             </p>
           )}
-
         </div>
       </div>
     </div>
