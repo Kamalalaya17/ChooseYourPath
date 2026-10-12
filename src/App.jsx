@@ -36,7 +36,7 @@ export default function App() {
       <BrowserRouter>
         <Routes>
           {/* Public */}
-          <Route path="/" element={<Home />} />
+          <Route path="/" element={<Navigate to="/reader/login" replace />} />
           <Route path="/browse" element={<ReaderBrowse />} />
 
           {/* Reader area */}
